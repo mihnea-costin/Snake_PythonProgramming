@@ -9,7 +9,7 @@ pygame.init()
 
 font_size = 25
 font = pygame.font.SysFont('arial', font_size)
-font_name = pygame.font.get_default_font()
+font_name = 'arial'
 
 # Check if a filename was passed as an argument
 if len(sys.argv) < 2:
