@@ -194,3 +194,17 @@ class SnakeGame:
             self.head = Point(self.head.x, self.head.y-BLOCK_SIZE)
         elif direction == Direction.DOWN:
             self.head = Point(self.head.x, self.head.y+BLOCK_SIZE)
+    
+    def _place_food(self):
+        while True:
+            food_x = random.randint(0, self.w - BLOCK_SIZE)
+            food_y = random.randint(0, self.h - BLOCK_SIZE)
+            is_on_obstacle = False
+            for obstacle in self.obstacles:
+                if (food_x == obstacle["x"] and 
+                    food_y == obstacle["y"]):
+                    is_on_obstacle = True
+                    break
+            if not is_on_obstacle:
+                break
+        self.food = Point(food_x, food_y)
