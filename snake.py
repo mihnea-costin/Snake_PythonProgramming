@@ -43,13 +43,24 @@ class Circle:
         self.radius = radius
         self.color = color
 
+BLUE = pygame.Color('blue')
+LIGHT_BLUE = pygame.Color('dodgerblue1')
+RED = pygame.Color('red')
+LIGHT_RED = pygame.Color('red1')
+ORANGE = pygame.Color('orange')
+YELLOW = pygame.Color('yellow')
+LIGHT_YELLOW = pygame.Color('yellow1')
+GREEN = pygame.Color('green')
+LIGHT_GREEN = pygame.Color('green1')
+BLUE = pygame.Color('blue')
+LIGHT_BLUE = pygame.Color('dodgerblue1')
+PURPLE = pygame.Color('purple')
+LIGHT_PURPLE = pygame.Color('purple1')
+PINK = pygame.Color('pink')
+LIGHT_PINK = pygame.Color('pink1')
+
 BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')
-
-BLUE1 = pygame.Color('blue')
-BLUE2 = pygame.Color('dodgerblue1')
-
-RED = pygame.Color('red')
 
 BLOCK_SIZE = 20
 
@@ -156,11 +167,11 @@ class Snake:
     
         for pt in self.snake:
             pygame.draw.rect(
-                self.display, BLUE1, 
+                self.display, BLUE, 
                 pygame.Rect(pt.x, pt.y, 
                             BLOCK_SIZE, BLOCK_SIZE))
             pygame.draw.rect(
-                self.display, BLUE2, 
+                self.display, LIGHT_BLUE, 
                 pygame.Rect(pt.x+2, pt.y+2, 
                             BLOCK_SIZE-4, BLOCK_SIZE-4))
         
