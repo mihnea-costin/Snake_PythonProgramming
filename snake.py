@@ -195,9 +195,9 @@ class Snake:
         self.score = 0
         self.food = None
         self.food_placing()
-        self.current_party = Party() # start the first party
+        self.current_party = Party() 
 
-        # init game state
+        # Initialize the direction and the snake.
         self.direction = Direction.LEFT
         self.head = Point(self.w/2, self.h/2)
         self.snake = [self.head]
@@ -224,7 +224,7 @@ class Snake:
                 pygame.quit()
                 quit()
 
-        # This code checks for the key pressed
+        # This code checks for the key pressed.
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.direction = Direction.LEFT
@@ -238,11 +238,11 @@ class Snake:
             # chooses random on the 4 directions
             self.direction = random.choice(list(Direction))
         
-        # This code moves the snake
+        # This code moves the snake.
         self.move(self.direction) 
         self.snake.insert(0, self.head)
 
-        # This code checks if the game is over
+        # This code checks if the game is over.
         game_over = False
         if self.collision_check():
             game_over = True
@@ -255,16 +255,16 @@ class Snake:
         food_rect = pygame.Rect(self.food.x, self.food.y, 
                                 BLOCK_SIZE, BLOCK_SIZE)
 
-        # This code checks if the snake collids the food
+        # This code checks if the snake collids the food.
         if head_rect.colliderect(food_rect):
-            self.score = self.score + 1 # Increase the score 
+            self.score = self.score + 
             self.food_placing()
         else:
             self.snake.pop()
 
         self.ui_updating()
         self.clock.tick(SNAKE_SPEED)
-        # Returns game over value and the score of the party
+        # Returns game over value and the score of the party.
         return game_over, self.score
 
     def collision_check(self):
@@ -287,14 +287,14 @@ class Snake:
         None
         """
 
-        # This code checks if the snake collides with the wall
+        # This code checks if the snake collides with the wall.
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
             self.head.y > self.h - BLOCK_SIZE or 
             self.head.y < 0):
             return True
 
-        # This code checks if the snake collides with itself
+        # This code checks if the snake collides with itself.
         if self.head in self.snake[1:]:
             return True
 
@@ -302,7 +302,7 @@ class Snake:
             self.head.x, self.head.y, 
             BLOCK_SIZE, BLOCK_SIZE)
 
-        # This code checks if the snake's head collides with the obstacle
+        # This code checks if the snake's head collides with the obstacle.
         for obstacle in self.obstacles:
             obstacle_rect = pygame.Rect(
                 obstacle['x']-10, obstacle['y']-10,
@@ -356,14 +356,14 @@ class Snake:
                     self.snake[i].x+2, self.snake[i].y+2, 
                     BLOCK_SIZE-4, BLOCK_SIZE-4))
         
-        # Draws the food as a rectangle
+        # Draws the food as a rectangle.
         pygame.draw.rect(
             self.display, RED, 
             pygame.Rect(
                 self.food.x, self.food.y, 
                 BLOCK_SIZE, BLOCK_SIZE))
 
-        # Draws the obstacles from the obstacles list as circles
+        # Draws the obstacles from the obstacles list as circles.
         for obstacle in game_obstacles:
             pygame.draw.circle(
                 self.display, obstacle["color"],
@@ -397,7 +397,7 @@ class Snake:
         None
         """
 
-        # This code moves the snake in one of the 4 directions
+        # This code moves the snake in one of the 4 directions.
         if direction == Direction.LEFT:
             self.head = Point(
                 self.head.x-BLOCK_SIZE, self.head.y)
@@ -410,9 +410,9 @@ class Snake:
         elif direction == Direction.DOWN:
             self.head = Point(
                 self.head.x, self.head.y+BLOCK_SIZE)
-        # This code moves the snake in a random choosen direction
+        # This code moves the snake in a random choosen direction.
         elif direction == Direction.R:
-            # This code moves the snake in one of the 4 directions
+            # This code moves the snake in one of the 4 directions.
             new_direction = random.choice(Direction)
             if new_direction == Direction.LEFT:
                 self.head = Point(
@@ -527,24 +527,24 @@ if __name__ == '__main__':
     num_parties = 6 
     game.list_of_scores = []
     terminated = False
-    # This code is the main loop of the game
+    # This code is the main loop of the game.
     while num_parties > 0:
         while True:
             game_over, score = game.play_step()
             if game_over:
-                # Check if there are more parties left
+                # Check if there are more parties left.
                 if num_parties-1 > 0 and terminated == False:
-                    # Add the score to the list of scores
+                    # Add the score to the list of scores.
                     game.list_of_scores.append(score)
                     # Make the screen black
                     game.display.fill(BLACK)
-                    # Ask the player if they want to continue
+                    # Ask the player if they want to continue.
                     party_msg = f"This party final score is {score}. Press Y to continue, N to exit"
                     game.draw_text(
                              party_msg, font, WHITE, 
                              game.display, game.w/2, game.h/2)
                     pygame.display.update()
-                    # Wait for the player's response
+                    # Wait for the player's response.
                     waiting = True
                     while waiting:
                         for event in pygame.event.get():
@@ -554,32 +554,30 @@ if __name__ == '__main__':
                             if event.type == pygame.KEYDOWN:
                                 if event.key == pygame.K_y:
                                     waiting = False
-                                    game.current_party_index += 1
+                                    game.current_party_index = game.current_party_index + 1
                                     game.__init__()
                                     num_parties = num_parties - 1
                                 elif event.key == pygame.K_n:
                                     waiting = False
                                     high_score = game.get_high_score(
                                         game.list_of_scores)
-                                    # remove the asking to continue text
+                                    # Removes the asking to continue text.
                                     game.display.fill(BLACK)
                                     final_msg = f"Game Over! This party score: {score}. High score: {high_score}"
                                     game.draw_text(
                                              final_msg, font, WHITE, 
                                              game.display, game.w/2, game.h/2)
-                                    # block the keyboard
+                                    # Blocks the keyboard.
                                     pygame.event.set_blocked(pygame.KEYDOWN)
                                     terminated = True
-                                    # stop = True
                                     pygame.display.update()
                                     pygame.time.delay(3000)
                 else:
-                    # break
-                    # This displays the game over screen and the high score
+                    # This displays the game over screen and the high score.
                     high_score = game.get_high_score(game.list_of_scores)
                     game.display.fill(BLACK)
                     game.draw_text(f"Game Over! This party score: {score}. High score: {high_score}", font, WHITE, game.display, game.w/2, game.h/2)
-                    # This blocks the keyboard
+                    # This blocks the keyboard.
                     pygame.event.set_blocked(pygame.KEYDOWN)
                     pygame.display.update()
                     pygame.time.delay(3000)
