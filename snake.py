@@ -35,6 +35,7 @@ class Direction(Enum):
     
 Point = namedtuple('Point', 'x, y')
 
+
 class Circle:
     def __init__(
             self, x, y, radius, 
