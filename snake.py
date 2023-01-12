@@ -123,3 +123,8 @@ class SnakeGame:
             self._place_food()
         else:
             self.snake.pop()
+
+        self._update_ui()
+        self.clock.tick(SPEED)
+        # 6. return game over and score
+        return game_over, self.score
