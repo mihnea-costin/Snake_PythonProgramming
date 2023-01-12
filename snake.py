@@ -66,7 +66,7 @@ WHITE = pygame.Color('white')
 
 BLOCK_SIZE = 20
 
-SPEED = 5
+SNAKE_SPEED = 5
 
 class Party:
     def __init__(self):
@@ -137,7 +137,7 @@ class Snake:
             self.snake.pop()
 
         self.ui_updating()
-        self.clock.tick(SPEED)
+        self.clock.tick(SNAKE_SPEED)
         # 6. return game over and score
         return game_over, self.score
 
