@@ -104,3 +104,11 @@ class SnakeGame:
         # 2. move
         self._move(self.direction) 
         self.snake.insert(0, self.head)
+
+        # 3. check if game over
+        game_over = False
+        if self._is_collision():
+            game_over = True
+            self.current_party.is_playing = False 
+            self.current_party.score = self.score 
+            return game_over, self.score
