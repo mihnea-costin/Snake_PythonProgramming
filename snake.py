@@ -221,3 +221,10 @@ class SnakeGame:
 
     def get_high_score(self, list_of_scores):
         return max(list_of_scores)
+
+if __name__ == '__main__':
+    game = SnakeGame()
+    game.current_party_index = 1
+    num_parties = 6 # number of parties to play
+    game.list_of_scores = []
+    terminated = False
