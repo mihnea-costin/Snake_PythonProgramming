@@ -11,3 +11,18 @@ font_size = 25
 font = pygame.font.SysFont('arial', font_size)
 # obtain the font name
 font_name = pygame.font.get_default_font()
+
+# Check if a filename was passed as an argument
+if len(sys.argv) < 2:
+    print("Error: No configuration file provided")
+    sys.exit()
+
+# Read the configuration data from the file
+filename = sys.argv[1]
+with open(filename, 'r') as f:
+    config = json.load(f)
+
+# Set the game window size and obstacles using the configuration data
+game_width = config['width']
+game_height = config['height']
+game_obstacles = config['obstacles']
