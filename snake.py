@@ -9,6 +9,7 @@ import pygame
 
 pygame.init()
 
+# Initialize the font module
 font_size = 25
 font_name = 'arial'
 font = pygame.font.SysFont(font_name, font_size)
@@ -28,21 +29,56 @@ game_width = config['width']
 game_height = config['height']
 game_obstacles = config['obstacles']
 
+
 class Direction(Enum):
-    """ A class for defining the directions"""
+    """A class for defining the directions.
+
+    Attributes:
+    RIGHT (int): The right direction
+    LEFT (int): The left direction
+    UP (int): The up direction
+    DOWN (int): The down direction
+
+    Methods:
+    None
+    """
+
     RIGHT = 1
     LEFT = 2
     UP = 3
     DOWN = 4
-    R = 5
     
 Point = namedtuple('Point', 'x, y')
 
+
 class Circle:
+    """A class for defining a circle with its coordinates, radius and color.
+
+    Attributes:
+    x (int): The x coordinate of the circle
+    y (int): The y coordinate of the circle
+    radius (int): The radius of the circle
+    color (pygame.Color): The color of the circle
+    """
+
     def __init__(
             self, x, y, radius, 
             color):
-        """ A class for defining a circle with its coordinates, radius and color"""
+        """A constructor for the Circle class.
+
+        Returns:
+        None
+
+        Side effects:
+        None
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """     
+
         self.x = x
         self.y = y
         self.radius = radius
@@ -79,19 +115,74 @@ BLOCK_SIZE = 20
 
 SNAKE_SPEED = 5
 
+
 class Party:
-    """This class represents a party of the snake game"""
+    """This class describes a party of the snake game.
+
+    Attributes:
+        score (int): The score of the party
+        is_playing (bool): True if the party is still playing, False otherwise
+    """
+
     def __init__(self):
-        """This code initializes the party"""
+        """This constructor initializes the party.
+
+        Returns:
+            None
+
+        Side effects:
+            None
+
+        Exceptions:
+            None
+
+        Restrictions:
+            None
+        """    
+
         self.score = 0
         self.is_playing = True
 
+
 class Snake:
-    """This class represents the snake game with all the initialisations"""		
+    """This class represents the snake game with all the initialisations.
+
+    Attributes:
+    w (int): The width of the game window
+    h (int): The height of the game window
+    obstacles (list): A list of the obstacles
+    display (pygame.Surface): The game window
+    clock (pygame.time.Clock): The game clock
+    score (int): The current score
+    food (Point): The current food
+    current_party (Party): The current party
+    direction (Direction): The current direction
+    head (Point): The current head
+    snake (list): The current snake
+    """
+
     def __init__(
             self, w=game_width, h=game_height,
             obstacles=game_obstacles):
-        """ This code initializes the game """
+        """ This constructor initializes the game.
+
+        Arguments:
+        w (int): The width of the game window
+        h (int): The height of the game window
+        obstacles (list): A list of the obstacles
+
+        Returns:
+        None
+
+        Side effects:
+        None
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """       
 
         self.w, self.h = w, h
         self.obstacles = obstacles
@@ -112,7 +203,22 @@ class Snake:
         self.snake = [self.head]
 
     def play_step(self):
-        """ This code plays a single step of the game """
+        """This function plays a single step of the game.
+
+        Returns:
+        game_over (bool): True if the game is over, False otherwise
+        score (int): The current score
+        
+        Side effects:
+        Updates the display
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -162,7 +268,25 @@ class Snake:
         return game_over, self.score
 
     def collision_check(self):
-        """This code checks if the snake collides with itself, the wall or the obstacles"""
+        """Checking snake collision with itself, the wall or the obstacles.
+
+        Keyword arguments:
+        None
+
+        Returns:
+        True: the snake collides with itself, the wall or the obstacles
+        False: otherwise
+
+        Side effects:
+        None
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         # This code checks if the snake collides with the wall
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
@@ -187,27 +311,59 @@ class Snake:
                 return True
     
     def ui_updating(self):
-        """This code updates the UI"""
+        """This function updates the UI.
+
+        Keyword arguments:
+        None
+
+        Returns:
+        None
+
+        Side effects:
+        Updates the display
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         self.display.fill(BLACK)
 
-        for pt in self.snake:
-            pygame.draw.rect(
-                self.display, BLUE1, 
-                pygame.Rect(pt.x, pt.y, 
-                            BLOCK_SIZE, BLOCK_SIZE))
-            pygame.draw.rect(
-                self.display, BLUE2, 
-                pygame.Rect(pt.x+2, pt.y+2, 
-                            BLOCK_SIZE-4, BLOCK_SIZE-4))
+        # Draws the head in a color.
+        pygame.draw.rect(
+            self.display, DARK_ORANGE,
+            pygame.Rect(
+                self.snake[0].x, self.snake[0].y, 
+                BLOCK_SIZE, BLOCK_SIZE))
+        pygame.draw.rect(
+            self.display, LIGHT_YELLOW,
+            pygame.Rect(
+                self.snake[0].x+2, self.snake[0].y+2, 
+                BLOCK_SIZE-4, BLOCK_SIZE-4))
         
-        # Draw the food as a rectangle
+        # Draws the rest of the body in a different color.
+        for i in range(1, len(self.snake)):
+            pygame.draw.rect(
+                self.display, BLUE, 
+                pygame.Rect(
+                    self.snake[i].x, self.snake[i].y,
+                    BLOCK_SIZE, BLOCK_SIZE))
+            pygame.draw.rect(
+                self.display, LIGHT_BLUE,
+                pygame.Rect(
+                    self.snake[i].x+2, self.snake[i].y+2, 
+                    BLOCK_SIZE-4, BLOCK_SIZE-4))
+        
+        # Draws the food as a rectangle
         pygame.draw.rect(
             self.display, RED, 
             pygame.Rect(
                 self.food.x, self.food.y, 
                 BLOCK_SIZE, BLOCK_SIZE))
 
-        # Draw the obstacles from the obstacles list as circles
+        # Draws the obstacles from the obstacles list as circles
         for obstacle in game_obstacles:
             pygame.draw.circle(
                 self.display, obstacle["color"],
@@ -223,7 +379,24 @@ class Snake:
     directions = [Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN]
 
     def move(self, direction):
-        """ This code moves the snake"""
+        """This function moves the snake in one of the 4 directions.
+
+        Keyword arguments:
+        direction: the direction in which the snake moves
+
+        Returns:
+        None
+
+        Side effects:
+        Changes the head of the snake
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         # This code moves the snake in one of the 4 directions
         if direction == Direction.LEFT:
             self.head = Point(
@@ -255,7 +428,24 @@ class Snake:
                     self.head.x, self.head.y+BLOCK_SIZE)
             
     def food_placing(self):
-        """This code is placing the food randomly"""
+        """This function is placing the food randomly.
+
+        Keyword arguments:
+        None
+
+        Returns:
+        None
+
+        Side effects:
+        Changes the food's position
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         while True:
             food_x = random.randint(
                 0, self.w-BLOCK_SIZE)
@@ -274,7 +464,29 @@ class Snake:
     def draw_text(
             self, text, font, 
             color, surface, x, y):
-        """This code draws the text on the screen"""
+        """This function draws the text on the screen.
+
+        Keyword arguments:
+        text: the text to be drawn
+        font: the font of the text
+        color: the color of the text
+        surface: the surface on which the text is drawn
+        x: the x coordinate of the text
+        y: the y coordinate of the text
+
+        Returns:
+        None
+
+        Side effects:
+        Draws the text on the screen
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """
+
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
@@ -287,11 +499,29 @@ class Snake:
 
     def get_high_score(
             self, list_of_scores):
-        """This code returns the highest score"""
+        """This code returns the highest score.
+
+        Keyword arguments:
+        list_of_scores: the list of scores
+
+        Returns:
+        The highest score
+
+        Side effects:
+        None
+
+        Exceptions:
+        None
+
+        Restrictions:
+        None
+        """ 
+
         return max(list_of_scores)
 
+
 if __name__ == '__main__':
-    """This code is the main code, in which the game is played"""
+    # This code is the main loop of the game.
     game = Snake()
     game.current_party_index = 1
     num_parties = 6 
