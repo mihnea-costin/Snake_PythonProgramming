@@ -8,8 +8,8 @@ from collections import namedtuple
 pygame.init()
 
 font_size = 25
-font = pygame.font.SysFont('arial', font_size)
 font_name = 'arial'
+font = pygame.font.SysFont(font_name, font_size)
 
 # Check if a filename was passed as an argument
 if len(sys.argv) < 2:
