@@ -35,7 +35,6 @@ class Direction(Enum):
     
 Point = namedtuple('Point', 'x, y')
 
-
 class Circle:
     def __init__(
             self, x, y, radius, 
@@ -44,3 +43,15 @@ class Circle:
         self.y = y
         self.radius = radius
         self.color = color
+
+BLACK = pygame.Color('black')
+WHITE = pygame.Color('white')
+
+BLUE1 = pygame.Color('blue')
+BLUE2 = pygame.Color('dodgerblue1')
+
+RED = pygame.Color('red')
+
+BLOCK_SIZE = 20
+
+SPEED = 5
