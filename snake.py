@@ -55,3 +55,8 @@ RED = pygame.Color('red')
 BLOCK_SIZE = 20
 
 SPEED = 5
+
+class Party:
+    def __init__(self):
+        self.score = 0
+        self.is_playing = True
