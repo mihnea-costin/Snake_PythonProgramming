@@ -140,13 +140,13 @@ class Snake:
         return game_over, self.score
 
     def collision_check(self):
-        # hits boundary
+
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
             self.head.y > self.h - BLOCK_SIZE or 
             self.head.y < 0):
             return True
-        # hits itself
+
         if self.head in self.snake[1:]:
             return True
 
