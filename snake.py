@@ -118,4 +118,8 @@ class SnakeGame:
         food_rect = pygame.Rect(self.food.x, self.food.y, 
                                 BLOCK_SIZE, BLOCK_SIZE)
 
-    
+        if head_rect.colliderect(food_rect):
+            self.score = self.score + 1
+            self._place_food()
+        else:
+            self.snake.pop()
