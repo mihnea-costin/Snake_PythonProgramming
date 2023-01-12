@@ -1,9 +1,11 @@
-import pygame
 import random
 import json
 import sys 
+
 from enum import Enum
 from collections import namedtuple
+
+import pygame
 
 pygame.init()
 
@@ -87,7 +89,7 @@ class Snake:
 
         self.score = 0
         self.food = None
-        self._place_food()
+        self.food_placing()
         self.current_party = Party() # start the first party
 
         # init game state
@@ -130,7 +132,7 @@ class Snake:
 
         if head_rect.colliderect(food_rect):
             self.score = self.score + 1
-            self._place_food()
+            self.food_placing()
         else:
             self.snake.pop()
 
@@ -205,7 +207,7 @@ class Snake:
         elif direction == Direction.DOWN:
             self.head = Point(self.head.x, self.head.y+BLOCK_SIZE)
     
-    def _place_food(self):
+    def food_placing(self):
         while True:
             food_x = random.randint(0, self.w-BLOCK_SIZE)
             food_y = random.randint(0, self.h-BLOCK_SIZE)
