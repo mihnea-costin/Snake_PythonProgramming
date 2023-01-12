@@ -112,3 +112,10 @@ class SnakeGame:
             self.current_party.is_playing = False 
             self.current_party.score = self.score 
             return game_over, self.score
+        
+        head_rect = pygame.Rect(self.head.x, self.head.y, 
+                                BLOCK_SIZE, BLOCK_SIZE)
+        food_rect = pygame.Rect(self.food.x, self.food.y, 
+                                BLOCK_SIZE, BLOCK_SIZE)
+
+    
