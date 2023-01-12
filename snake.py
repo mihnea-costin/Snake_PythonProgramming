@@ -29,6 +29,7 @@ game_height = config['height']
 game_obstacles = config['obstacles']
 
 class Direction(Enum):
+    """ A class for defining the directions"""
     RIGHT = 1
     LEFT = 2
     UP = 3
@@ -41,28 +42,37 @@ class Circle:
     def __init__(
             self, x, y, radius, 
             color):
+        """ A class for defining a circle with its coordinates, radius and color"""
         self.x = x
         self.y = y
         self.radius = radius
         self.color = color
 
+# This code defines some colors
 BLUE = pygame.Color('blue')
 LIGHT_BLUE = pygame.Color('dodgerblue1')
+
 RED = pygame.Color('red')
 LIGHT_RED = pygame.Color('red1')
+
 ORANGE = pygame.Color('orange')
+DARK_ORANGE = pygame.Color('orange2')
+
 YELLOW = pygame.Color('yellow')
 LIGHT_YELLOW = pygame.Color('yellow1')
+
 GREEN = pygame.Color('green')
 LIGHT_GREEN = pygame.Color('green1')
-BLUE = pygame.Color('blue')
-LIGHT_BLUE = pygame.Color('dodgerblue1')
+DARK_GREEN = pygame.Color('forestgreen')
+
 PURPLE = pygame.Color('purple')
 LIGHT_PURPLE = pygame.Color('purple1')
+
 PINK = pygame.Color('pink')
 LIGHT_PINK = pygame.Color('pink1')
 
 BLACK = pygame.Color('black')
+
 WHITE = pygame.Color('white')
 
 BLOCK_SIZE = 20
@@ -72,6 +82,7 @@ SNAKE_SPEED = 5
 class Party:
     """This class represents a party of the snake game"""
     def __init__(self):
+        """This code initializes the party"""
         self.score = 0
         self.is_playing = True
 
@@ -107,6 +118,7 @@ class Snake:
                 pygame.quit()
                 quit()
 
+        # This code checks for the key pressed
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.direction = Direction.LEFT
@@ -117,13 +129,14 @@ class Snake:
         elif key[pygame.K_DOWN]:
             self.direction = Direction.DOWN   
         elif key[pygame.K_r]:
-            self.direction = Direction.R
+            # chooses random on the 4 directions
+            self.direction = random.choice(list(Direction))
         
-        # 2. move
+        # This code moves the snake
         self.move(self.direction) 
         self.snake.insert(0, self.head)
 
-        # 3. This code checks if the game is over
+        # This code checks if the game is over
         game_over = False
         if self.collision_check():
             game_over = True
@@ -136,6 +149,7 @@ class Snake:
         food_rect = pygame.Rect(self.food.x, self.food.y, 
                                 BLOCK_SIZE, BLOCK_SIZE)
 
+        # This code checks if the snake collids the food
         if head_rect.colliderect(food_rect):
             self.score = self.score + 1 # Increase the score 
             self.food_placing()
@@ -144,25 +158,27 @@ class Snake:
 
         self.ui_updating()
         self.clock.tick(SNAKE_SPEED)
-        # 6. Returns game over value and the score of the party
+        # Returns game over value and the score of the party
         return game_over, self.score
 
     def collision_check(self):
         """This code checks if the snake collides with itself, the wall or the obstacles"""
+        # This code checks if the snake collides with the wall
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
             self.head.y > self.h - BLOCK_SIZE or 
             self.head.y < 0):
             return True
 
+        # This code checks if the snake collides with itself
         if self.head in self.snake[1:]:
             return True
 
-        # THis code checks if the snake's head collides with the obstacle
         head_rect = pygame.Rect(
             self.head.x, self.head.y, 
             BLOCK_SIZE, BLOCK_SIZE)
 
+        # This code checks if the snake's head collides with the obstacle
         for obstacle in self.obstacles:
             obstacle_rect = pygame.Rect(
                 obstacle['x']-10, obstacle['y']-10,
@@ -173,24 +189,25 @@ class Snake:
     def ui_updating(self):
         """This code updates the UI"""
         self.display.fill(BLACK)
-    
+
         for pt in self.snake:
             pygame.draw.rect(
-                self.display, BLUE, 
+                self.display, BLUE1, 
                 pygame.Rect(pt.x, pt.y, 
                             BLOCK_SIZE, BLOCK_SIZE))
             pygame.draw.rect(
-                self.display, LIGHT_BLUE, 
+                self.display, BLUE2, 
                 pygame.Rect(pt.x+2, pt.y+2, 
                             BLOCK_SIZE-4, BLOCK_SIZE-4))
         
+        # Draw the food as a rectangle
         pygame.draw.rect(
             self.display, RED, 
             pygame.Rect(
                 self.food.x, self.food.y, 
                 BLOCK_SIZE, BLOCK_SIZE))
 
-        # draw the obstacles from the obstacles list as circles
+        # Draw the obstacles from the obstacles list as circles
         for obstacle in game_obstacles:
             pygame.draw.circle(
                 self.display, obstacle["color"],
@@ -207,27 +224,43 @@ class Snake:
 
     def move(self, direction):
         """ This code moves the snake"""
-        moved = False
+        # This code moves the snake in one of the 4 directions
         if direction == Direction.LEFT:
-            self.head = Point(self.head.x-BLOCK_SIZE, self.head.y)
+            self.head = Point(
+                self.head.x-BLOCK_SIZE, self.head.y)
         elif direction == Direction.RIGHT:
-            self.head = Point(self.head.x+BLOCK_SIZE, self.head.y)
+            self.head = Point(
+                self.head.x+BLOCK_SIZE, self.head.y)
         elif direction == Direction.UP:
-            self.head = Point(self.head.x, self.head.y-BLOCK_SIZE)
+            self.head = Point(
+                self.head.x, self.head.y-BLOCK_SIZE)
         elif direction == Direction.DOWN:
-            self.head = Point(self.head.x, self.head.y+BLOCK_SIZE)
+            self.head = Point(
+                self.head.x, self.head.y+BLOCK_SIZE)
+        # This code moves the snake in a random choosen direction
         elif direction == Direction.R:
-            direction = random.choice(list(directions))
-            self.move(direction)
-            moved = True
+            # This code moves the snake in one of the 4 directions
+            new_direction = random.choice(Direction)
+            if new_direction == Direction.LEFT:
+                self.head = Point(
+                    self.head.x-BLOCK_SIZE, self.head.y)
+            if new_direction == Direction.RIGHT:
+                self.head = Point(
+                    self.head.x+BLOCK_SIZE, self.head.y)
+            if new_direction == Direction.UP:
+                self.head = Point(
+                    self.head.x, self.head.y-BLOCK_SIZE)
+            if new_direction == Direction.DOWN:
+                self.head = Point(
+                    self.head.x, self.head.y+BLOCK_SIZE)
             
-    # capul sarpelui sa aiba alta culoare
-
     def food_placing(self):
-        """ This code is placing the food randomly"""
+        """This code is placing the food randomly"""
         while True:
-            food_x = random.randint(0, self.w-BLOCK_SIZE)
-            food_y = random.randint(0, self.h-BLOCK_SIZE)
+            food_x = random.randint(
+                0, self.w-BLOCK_SIZE)
+            food_y = random.randint(
+                0, self.h-BLOCK_SIZE)
             is_on_obstacle = False
             for obstacle in self.obstacles:
                 if (food_x == obstacle["x"] and 
@@ -245,13 +278,15 @@ class Snake:
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
-        font = pygame.font.SysFont(font_name, int(font_size * self.w/500))
+        font = pygame.font.SysFont(
+             font_name, int(font_size * self.w/500))
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
         surface.blit(textobj, textrect)
 
-    def get_high_score(self, list_of_scores):
+    def get_high_score(
+            self, list_of_scores):
         """This code returns the highest score"""
         return max(list_of_scores)
 
@@ -259,7 +294,7 @@ if __name__ == '__main__':
     """This code is the main code, in which the game is played"""
     game = Snake()
     game.current_party_index = 1
-    num_parties = 6 # number of parties to play
+    num_parties = 6 
     game.list_of_scores = []
     terminated = False
     # This code is the main loop of the game
@@ -291,7 +326,7 @@ if __name__ == '__main__':
                                     waiting = False
                                     game.current_party_index += 1
                                     game.__init__()
-                                    num_parties -= 1
+                                    num_parties = num_parties - 1
                                 elif event.key == pygame.K_n:
                                     waiting = False
                                     high_score = game.get_high_score(
