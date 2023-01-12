@@ -151,3 +151,36 @@ class SnakeGame:
                 20, 20)
             if head_rect.colliderect(obstacle_rect):
                 return True
+    
+    def _update_ui(self):
+        self.display.fill(BLACK)
+    
+        for pt in self.snake:
+            pygame.draw.rect(
+                self.display, BLUE1, 
+                pygame.Rect(pt.x, pt.y, 
+                            BLOCK_SIZE, BLOCK_SIZE))
+            pygame.draw.rect(
+                self.display, BLUE2, 
+                pygame.Rect(pt.x+2, pt.y+2, 
+                            BLOCK_SIZE-4, BLOCK_SIZE-4))
+        
+        pygame.draw.rect(
+            self.display, RED, 
+            pygame.Rect(
+                self.food.x, self.food.y, 
+                BLOCK_SIZE, BLOCK_SIZE)
+                )
+
+        # draw the obstacles from the obstacles list as circles
+        for obstacle in game_obstacles:
+            pygame.draw.circle(
+                self.display, obstacle["color"],
+                (obstacle["x"], obstacle["y"]), 10)
+
+        score_text = font.render(
+            f"Party: {self.current_party_index}", True,
+            WHITE)
+        self.display.blit(score_text, (10, 10))
+        
+        pygame.display.update()
