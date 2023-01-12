@@ -33,6 +33,7 @@ class Direction(Enum):
     LEFT = 2
     UP = 3
     DOWN = 4
+    R = 5
     
 Point = namedtuple('Point', 'x, y')
 
@@ -69,15 +70,17 @@ BLOCK_SIZE = 20
 SNAKE_SPEED = 5
 
 class Party:
+    """This class represents a party of the snake game"""
     def __init__(self):
         self.score = 0
         self.is_playing = True
 
 class Snake:
-    
+    """This class represents the snake game with all the initialisations"""		
     def __init__(
             self, w=game_width, h=game_height,
             obstacles=game_obstacles):
+        """ This code initializes the game """
 
         self.w, self.h = w, h
         self.obstacles = obstacles
@@ -98,6 +101,7 @@ class Snake:
         self.snake = [self.head]
 
     def play_step(self):
+        """ This code plays a single step of the game """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -111,13 +115,15 @@ class Snake:
         elif key[pygame.K_UP]:
             self.direction = Direction.UP
         elif key[pygame.K_DOWN]:
-            self.direction = Direction.DOWN    
+            self.direction = Direction.DOWN   
+        elif key[pygame.K_r]:
+            self.direction = Direction.R
         
         # 2. move
         self.move(self.direction) 
         self.snake.insert(0, self.head)
 
-        # 3. check if game over
+        # 3. This code checks if the game is over
         game_over = False
         if self.collision_check():
             game_over = True
@@ -131,18 +137,18 @@ class Snake:
                                 BLOCK_SIZE, BLOCK_SIZE)
 
         if head_rect.colliderect(food_rect):
-            self.score = self.score + 1
+            self.score = self.score + 1 # Increase the score 
             self.food_placing()
         else:
             self.snake.pop()
 
         self.ui_updating()
         self.clock.tick(SNAKE_SPEED)
-        # 6. return game over and score
+        # 6. Returns game over value and the score of the party
         return game_over, self.score
 
     def collision_check(self):
-
+        """This code checks if the snake collides with itself, the wall or the obstacles"""
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
             self.head.y > self.h - BLOCK_SIZE or 
@@ -152,7 +158,7 @@ class Snake:
         if self.head in self.snake[1:]:
             return True
 
-        # check if the snake's head collides with the obstacle
+        # THis code checks if the snake's head collides with the obstacle
         head_rect = pygame.Rect(
             self.head.x, self.head.y, 
             BLOCK_SIZE, BLOCK_SIZE)
@@ -165,6 +171,7 @@ class Snake:
                 return True
     
     def ui_updating(self):
+        """This code updates the UI"""
         self.display.fill(BLACK)
     
         for pt in self.snake:
@@ -181,8 +188,7 @@ class Snake:
             self.display, RED, 
             pygame.Rect(
                 self.food.x, self.food.y, 
-                BLOCK_SIZE, BLOCK_SIZE)
-                )
+                BLOCK_SIZE, BLOCK_SIZE))
 
         # draw the obstacles from the obstacles list as circles
         for obstacle in game_obstacles:
@@ -197,7 +203,11 @@ class Snake:
         
         pygame.display.update()
     
+    directions = [Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN]
+
     def move(self, direction):
+        """ This code moves the snake"""
+        moved = False
         if direction == Direction.LEFT:
             self.head = Point(self.head.x-BLOCK_SIZE, self.head.y)
         elif direction == Direction.RIGHT:
@@ -206,8 +216,15 @@ class Snake:
             self.head = Point(self.head.x, self.head.y-BLOCK_SIZE)
         elif direction == Direction.DOWN:
             self.head = Point(self.head.x, self.head.y+BLOCK_SIZE)
-    
+        elif direction == Direction.R:
+            direction = random.choice(list(directions))
+            self.move(direction)
+            moved = True
+            
+    # capul sarpelui sa aiba alta culoare
+
     def food_placing(self):
+        """ This code is placing the food randomly"""
         while True:
             food_x = random.randint(0, self.w-BLOCK_SIZE)
             food_y = random.randint(0, self.h-BLOCK_SIZE)
@@ -221,7 +238,10 @@ class Snake:
                 break
         self.food = Point(food_x, food_y)
     
-    def draw_text(self, text, font, color, surface, x, y):
+    def draw_text(
+            self, text, font, 
+            color, surface, x, y):
+        """This code draws the text on the screen"""
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
@@ -232,14 +252,17 @@ class Snake:
         surface.blit(textobj, textrect)
 
     def get_high_score(self, list_of_scores):
+        """This code returns the highest score"""
         return max(list_of_scores)
 
 if __name__ == '__main__':
+    """This code is the main code, in which the game is played"""
     game = Snake()
     game.current_party_index = 1
     num_parties = 6 # number of parties to play
     game.list_of_scores = []
     terminated = False
+    # This code is the main loop of the game
     while num_parties > 0:
         while True:
             game_over, score = game.play_step()
@@ -287,12 +310,11 @@ if __name__ == '__main__':
                                     pygame.time.delay(3000)
                 else:
                     # break
-                    # display game over screen and high score
+                    # This displays the game over screen and the high score
                     high_score = game.get_high_score(game.list_of_scores)
                     game.display.fill(BLACK)
                     game.draw_text(f"Game Over! This party score: {score}. High score: {high_score}", font, WHITE, game.display, game.w/2, game.h/2)
-                    # block the keyboard
+                    # This blocks the keyboard
                     pygame.event.set_blocked(pygame.KEYDOWN)
                     pygame.display.update()
                     pygame.time.delay(3000)
-                    # break
