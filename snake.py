@@ -208,3 +208,13 @@ class SnakeGame:
             if not is_on_obstacle:
                 break
         self.food = Point(food_x, food_y)
+    
+    def draw_text(self, text, font, color, surface, x, y):
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.center = (x, y)
+        font = pygame.font.SysFont(font_name, int(font_size * self.w / 500))
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.center = (x, y)
+        surface.blit(textobj, textrect)
