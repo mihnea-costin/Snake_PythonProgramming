@@ -257,7 +257,7 @@ class Snake:
 
         # This code checks if the snake collids the food.
         if head_rect.colliderect(food_rect):
-            self.score = self.score + 
+            self.score = self.score + 1
             self.food_placing()
         else:
             self.snake.pop()
