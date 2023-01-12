@@ -218,3 +218,6 @@ class SnakeGame:
         textrect = textobj.get_rect()
         textrect.center = (x, y)
         surface.blit(textobj, textrect)
+
+    def get_high_score(self, list_of_scores):
+        return max(list_of_scores)
