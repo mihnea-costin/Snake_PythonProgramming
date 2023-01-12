@@ -74,3 +74,13 @@ class SnakeGame:
         pygame.display.set_caption('Snake game')
         
         self.clock = pygame.time.Clock()
+
+        self.score = 0
+        self.food = None
+        self._place_food()
+        self.current_party = Party() # start the first party
+
+        # init game state
+        self.direction = Direction.LEFT
+        self.head = Point(self.w/2, self.h/2)
+        self.snake = [self.head]
