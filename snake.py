@@ -84,3 +84,23 @@ class SnakeGame:
         self.direction = Direction.LEFT
         self.head = Point(self.w/2, self.h/2)
         self.snake = [self.head]
+
+    def play_step(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        key = pygame.key.get_pressed()
+        if key[pygame.K_LEFT]:
+            self.direction = Direction.LEFT
+        elif key[pygame.K_RIGHT]:
+            self.direction = Direction.RIGHT
+        elif key[pygame.K_UP]:
+            self.direction = Direction.UP
+        elif key[pygame.K_DOWN]:
+            self.direction = Direction.DOWN    
+        
+        # 2. move
+        self._move(self.direction) 
+        self.snake.insert(0, self.head)
