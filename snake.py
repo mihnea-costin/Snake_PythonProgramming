@@ -128,3 +128,26 @@ class SnakeGame:
         self.clock.tick(SPEED)
         # 6. return game over and score
         return game_over, self.score
+
+    def _is_collision(self):
+        # hits boundary
+        if (self.head.x > self.w - BLOCK_SIZE or 
+            self.head.x < 0 or 
+            self.head.y > self.h - BLOCK_SIZE or 
+            self.head.y < 0):
+            return True
+        # hits itself
+        if self.head in self.snake[1:]:
+            return True
+
+        # check if the snake's head collides with the obstacle
+        head_rect = pygame.Rect(
+            self.head.x, self.head.y, 
+            BLOCK_SIZE, BLOCK_SIZE)
+
+        for obstacle in self.obstacles:
+            obstacle_rect = pygame.Rect(
+                obstacle['x']-10, obstacle['y']-10,
+                20, 20)
+            if head_rect.colliderect(obstacle_rect):
+                return True
