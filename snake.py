@@ -228,3 +228,59 @@ if __name__ == '__main__':
     num_parties = 6 # number of parties to play
     game.list_of_scores = []
     terminated = False
+    while num_parties > 0:
+        while True:
+            game_over, score = game.play_step()
+            if game_over:
+                # Check if there are more parties left
+                if num_parties-1 > 0 and terminated == False:
+                    # Add the score to the list of scores
+                    game.list_of_scores.append(score)
+                    # Make the screen black
+                    game.display.fill(BLACK)
+                    # Ask the player if they want to continue
+                    party_msg = f"This party final score is {score}. Press Y to continue, N to exit"
+                    game.draw_text(
+                             party_msg, font, WHITE, 
+                             game.display, game.w/2, game.h/2)
+                    pygame.display.update()
+                    # Wait for the player's response
+                    waiting = True
+                    while waiting:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                quit()
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_y:
+                                    waiting = False
+                                    game.current_party_index += 1
+                                    game.__init__()
+                                    num_parties -= 1
+                                elif event.key == pygame.K_n:
+                                    waiting = False
+                                    high_score = game.get_high_score(
+                                        game.list_of_scores)
+                                    # remove the asking to continue text
+                                    game.display.fill(BLACK)
+                                    final_msg = f"Game Over! This party score: {score}. High score: {high_score}"
+                                    game.draw_text(
+                                             final_msg, font, WHITE, 
+                                             game.display, game.w/2, game.h/2)
+                                    # block the keyboard
+                                    pygame.event.set_blocked(pygame.KEYDOWN)
+                                    terminated = True
+                                    # stop = True
+                                    pygame.display.update()
+                                    pygame.time.delay(3000)
+                else:
+                    # break
+                    # display game over screen and high score
+                    high_score = game.get_high_score(game.list_of_scores)
+                    game.display.fill(BLACK)
+                    game.draw_text(f"Game Over! This party score: {score}. High score: {high_score}", font, WHITE, game.display, game.w/2, game.h/2)
+                    # block the keyboard
+                    pygame.event.set_blocked(pygame.KEYDOWN)
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+                    # break
