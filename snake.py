@@ -26,3 +26,20 @@ with open(filename, 'r') as f:
 game_width = config['width']
 game_height = config['height']
 game_obstacles = config['obstacles']
+
+class Direction(Enum):
+    RIGHT = 1
+    LEFT = 2
+    UP = 3
+    DOWN = 4
+    
+Point = namedtuple('Point', 'x, y')
+
+class Circle:
+    def __init__(
+            self, x, y, radius, 
+            color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
