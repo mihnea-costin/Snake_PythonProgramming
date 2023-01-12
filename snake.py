@@ -9,7 +9,6 @@ pygame.init()
 
 font_size = 25
 font = pygame.font.SysFont('arial', font_size)
-# obtain the font name
 font_name = pygame.font.get_default_font()
 
 # Check if a filename was passed as an argument
@@ -61,7 +60,7 @@ class Party:
         self.score = 0
         self.is_playing = True
 
-class SnakeGame:
+class Snake:
     
     def __init__(
             self, w=game_width, h=game_height,
@@ -102,12 +101,12 @@ class SnakeGame:
             self.direction = Direction.DOWN    
         
         # 2. move
-        self._move(self.direction) 
+        self.move(self.direction) 
         self.snake.insert(0, self.head)
 
         # 3. check if game over
         game_over = False
-        if self._is_collision():
+        if self.collision_check():
             game_over = True
             self.current_party.is_playing = False 
             self.current_party.score = self.score 
@@ -124,12 +123,12 @@ class SnakeGame:
         else:
             self.snake.pop()
 
-        self._update_ui()
+        self.ui_updating()
         self.clock.tick(SPEED)
         # 6. return game over and score
         return game_over, self.score
 
-    def _is_collision(self):
+    def collision_check(self):
         # hits boundary
         if (self.head.x > self.w - BLOCK_SIZE or 
             self.head.x < 0 or 
@@ -152,7 +151,7 @@ class SnakeGame:
             if head_rect.colliderect(obstacle_rect):
                 return True
     
-    def _update_ui(self):
+    def ui_updating(self):
         self.display.fill(BLACK)
     
         for pt in self.snake:
@@ -181,11 +180,11 @@ class SnakeGame:
         score_text = font.render(
             f"Party: {self.current_party_index}", True,
             WHITE)
-        self.display.blit(score_text, (10, 10))
+        self.display.blit(score_text, (10,10))
         
         pygame.display.update()
     
-    def _move(self, direction):
+    def move(self, direction):
         if direction == Direction.LEFT:
             self.head = Point(self.head.x-BLOCK_SIZE, self.head.y)
         elif direction == Direction.RIGHT:
@@ -197,8 +196,8 @@ class SnakeGame:
     
     def _place_food(self):
         while True:
-            food_x = random.randint(0, self.w - BLOCK_SIZE)
-            food_y = random.randint(0, self.h - BLOCK_SIZE)
+            food_x = random.randint(0, self.w-BLOCK_SIZE)
+            food_y = random.randint(0, self.h-BLOCK_SIZE)
             is_on_obstacle = False
             for obstacle in self.obstacles:
                 if (food_x == obstacle["x"] and 
@@ -213,7 +212,7 @@ class SnakeGame:
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
-        font = pygame.font.SysFont(font_name, int(font_size * self.w / 500))
+        font = pygame.font.SysFont(font_name, int(font_size * self.w/500))
         textobj = font.render(text, 1, color)
         textrect = textobj.get_rect()
         textrect.center = (x, y)
@@ -223,7 +222,7 @@ class SnakeGame:
         return max(list_of_scores)
 
 if __name__ == '__main__':
-    game = SnakeGame()
+    game = Snake()
     game.current_party_index = 1
     num_parties = 6 # number of parties to play
     game.list_of_scores = []
