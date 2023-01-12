@@ -184,3 +184,13 @@ class SnakeGame:
         self.display.blit(score_text, (10, 10))
         
         pygame.display.update()
+    
+        def _move(self, direction):
+        if direction == Direction.LEFT:
+            self.head = Point(self.head.x-BLOCK_SIZE, self.head.y)
+        elif direction == Direction.RIGHT:
+            self.head = Point(self.head.x+BLOCK_SIZE, self.head.y)
+        elif direction == Direction.UP:
+            self.head = Point(self.head.x, self.head.y-BLOCK_SIZE)
+        elif direction == Direction.DOWN:
+            self.head = Point(self.head.x, self.head.y+BLOCK_SIZE)
