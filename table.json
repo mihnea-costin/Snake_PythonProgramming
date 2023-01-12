@@ -1,0 +1,16 @@
+{
+    "width": 800,
+    "height": 480,
+    "obstacles": [
+        {
+            "x": 100,
+            "y": 100,
+            "color": "RED"
+        },
+        {  
+            "x": 200,
+            "y": 200,
+            "color": "GREEN"
+        }
+    ]
+}
