@@ -60,3 +60,17 @@ class Party:
     def __init__(self):
         self.score = 0
         self.is_playing = True
+
+class SnakeGame:
+    
+    def __init__(
+            self, w=game_width, h=game_height,
+            obstacles=game_obstacles):
+
+        self.w, self.h = w, h
+        self.obstacles = obstacles
+
+        self.display = pygame.display.set_mode((self.w, self.h))
+        pygame.display.set_caption('Snake game')
+        
+        self.clock = pygame.time.Clock()
